@@ -90,6 +90,44 @@ interface mozIDOMApplication  : nsISupports
    * onsuccess will be called once data is actually cleared.
    */
   nsIDOMDOMRequest clearBrowserData();
+
+  /**
+   * Stop a web application, no matter whether it is running foreground or background.
+   *
+   * @returns   : A DOMRequest object, onsuccess will be triggered if the app is stopped
+   */
+  nsIDOMDOMRequest stop();
+
+  /**
+   * Check if an application is running or not.
+   *
+   * @returns   : A DOMRequest object, returning the app's running status in |result.status|
+   *              RUNNING V.S. STOP
+   */
+  nsIDOMDOMRequest isRunning();
+
+  /**
+   * Clear the user data (or cached data) of the application
+   *
+   * @param clearType : The data to clear of the application, can be:
+   *          "USER_DATA" : Only clear the user data of the application
+   *          "CACHE": Only clear the app cache of the application
+   *          "ALL": Clear user data and app cache of the application
+   * @returns   : A DOMRequest object, onsuccess will be called if data is cleared
+   */
+  nsIDOMDOMRequest clearAppData(in string clearType);
+
+  /**
+   * Get the size of the application
+   *
+   * @param type : The size to calculate, can be:
+   *          "APP" : Calculate the size of app itself (in /data partition)
+   *          "USER_DATA" : Calculate the size of the user data
+   *          "CACHE": Calculate the size of the app cache
+   *          "ALL": Calculate the size of app + user data + cache
+   * @returns   : A DOMRequest object, returning the result in |result|
+   */
+  nsIDOMDOMRequest getDataSize(in string type);
 };
 
 [scriptable, uuid(cf742022-5ba3-11e2-868f-03310341b006)]
@@ -136,6 +174,13 @@ interface mozIDOMApplicationMgmt : nsISupports
    *              if uninstall succeeds; returning "NOT_INSTALLED" error otherwise.
    */
   nsIDOMDOMRequest uninstall(in mozIDOMApplication app);
+
+  /**
+   * Return an array of the running applications.
+   *
+   * @returns   : A DOMRequest object, returning the app's manifestURL array in |result|
+   */
+  nsIDOMDOMRequest getRunningApps();
 };
 
 [scriptable, uuid(abfc6c15-8b92-4b9a-b892-52e6ae76f379)]
